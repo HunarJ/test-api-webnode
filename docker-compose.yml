@@ -1,0 +1,58 @@
+services:
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: orders-api-php
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        depends_on:
+            - db
+        environment:
+            - DATABASE_URL=${DATABASE_URL}
+        networks:
+            - app-network
+
+    nginx:
+        image: nginx:latest
+        container_name: orders-api-nginx
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www/html
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - php
+        networks:
+            - app-network
+
+    db:
+        image: mysql:8.0
+        container_name: orders-api-mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - "3306:3306"
+        volumes:
+            - db_data:/var/lib/mysql
+        networks:
+            - app-network
+
+    adminer:
+        image: adminer
+        container_name: orders-api-adminer
+        ports:
+            - "8080:8080"
+        networks:
+            - app-network
+
+volumes:
+    db_data:
+
+networks:
+    app-network:
+        driver: bridge
