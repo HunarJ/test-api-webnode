@@ -120,3 +120,9 @@ This project is a REST API for order management built with Symfony, Doctrine, an
 -   `tests/` – Automated tests
 
 ---
+
+## Conclusion
+
+-   Time requirement: Due to the necessity of working to complete the project I was hired to do, I was able to devote about two hours to the project, for which reason I used the symfony framework and its extensions to quickly complete the API endpoint and write its test
+
+---
